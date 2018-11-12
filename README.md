@@ -5,17 +5,25 @@ I will write the basic info later :P
 
 # To Do
 
-- [ ] Get Anime Info
+- [X] Anime
 	- [x] Basic info
 	- [x] Characters and Staff
 	- [x] Episodes
 	- [x] Pictures
 	- [x] News
 	- [x] Forum
-	- [ ] Videos 
-	- [ ] Stats
-	- [ ] Mote Info
-- [ ] Manga
+	- [X] Videos 
+	- [X] Stats
+	- [X] Mote Info
+- [X] Manga
+	- [x] Basic info
+	- [x] Characters
+	- [x] News
+	- [x] Forum
+	- [X] Stats
+	- [X] Mote Info
+- [X] TopAnime
+- [X] TopManga
 - [ ] Characters
 - [ ] Person
 - [ ] Users
