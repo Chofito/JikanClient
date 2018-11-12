@@ -4,9 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JikanClient", "JikanClient\JikanClient.csproj", "{4E7BCC66-4489-4CA7-BAC6-059C52F684A1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JikanTest", "JikanTest\JikanTest.csproj", "{B129C685-EA44-4B2C-A736-8483642F4435}"
-EndProject
+EndProjectS
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
