@@ -4,20 +4,28 @@ namespace JikanClient.Params
 {
     public enum TopAnimeSubType
     {
-        [Description("airing")] TopAiring,
+        [Description("airing")]
+        TopAiring,
 
-        [Description("upcoming")] TopUpcoming,
+        [Description("upcoming")]
+        TopUpcoming,
 
-        [Description("tv")] TopTv,
+        [Description("tv")]
+        TopTv,
 
-        [Description("movies")] TopMovies,
+        [Description("movies")]
+        TopMovies,
 
-        [Description("ova")] TopOva,
+        [Description("ova")]
+        TopOva,
 
-        [Description("special")] TopSpecial,
+        [Description("special")]
+        TopSpecial,
 
-        [Description("bypopularity")] TopPopularity,
+        [Description("bypopularity")]
+        TopPopularity,
 
-        [Description("favorite")] TopFavorite
+        [Description("favorite")]
+        TopFavorite
     }
 }

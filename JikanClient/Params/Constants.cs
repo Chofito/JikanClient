@@ -19,10 +19,7 @@ namespace JikanClient.Params
         public static readonly string Forum = "forum";
         public static readonly string MoreInfo = "moreinfo";
         public static readonly string Season = "season";
-        public static readonly string Summer = "summer";
-        public static readonly string Spring = "spring";
-        public static readonly string Fall = "fall";
-        public static readonly string Winter = "winter";
         public static readonly string SeasonArchive = "archive";
+        public static readonly string Schedule = "schedule";
     }
 }

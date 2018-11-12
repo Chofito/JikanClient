@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JikanClient.Connection;
+using JikanClient.EnumExtensions;
 using JikanClient.Exceptions;
 using JikanClient.Interfaces;
 using JikanClient.Models.Anime;
@@ -31,11 +32,11 @@ namespace JikanClient
         public async Task<T> ExecuteGetRequest<T>(string[] args) where T : class
         {
             T returnedObject;
-            var requestUrl = String.Join("/", args);
+            var requestUrl = string.Join("/", args);
 
             try
             {
-                using (HttpResponseMessage response = await _jikanHttpClient.GetAsync(requestUrl))
+                using (var response = await _jikanHttpClient.GetAsync(requestUrl))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -51,6 +52,7 @@ namespace JikanClient
             catch (JsonSerializationException e)
             {
                 throw new JikanRequestException(Errors.SerializationFailed + Environment.NewLine + "Inner exception message: " + e.Message);
+
             }
 
             return returnedObject;
@@ -130,152 +132,353 @@ namespace JikanClient
 
         public async Task<AnimeVideos> GetAnimeVideos(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Anime,
+                id.ToString(),
+                Constants.Videos
+            };
+            return await ExecuteGetRequest<AnimeVideos>(request);
         }
 
         public async Task<AnimeStats> GetAnimeStats(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Anime,
+                id.ToString(),
+                Constants.Stats
+            };
+            return await ExecuteGetRequest<AnimeStats>(request);
         }
 
         public async Task<AnimeForum> GetAnimeForum(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Anime,
+                id.ToString(),
+                Constants.Forum
+            };
+            return await ExecuteGetRequest<AnimeForum>(request);
         }
 
         public async Task<AnimeMoreInfo> GetAnimeMoreInfo(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Anime,
+                id.ToString(),
+                Constants.MoreInfo
+            };
+            return await ExecuteGetRequest<AnimeMoreInfo>(request);
         }
 
         public async Task<Manga> GetManga(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString()
+            };
+            return await ExecuteGetRequest<Manga>(request);
         }
 
         public async Task<MangaCharacters> GetMangaCharacters(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.MangaCharacters
+            };
+            return await ExecuteGetRequest<MangaCharacters>(request);
         }
 
         public async Task<MangaNews> GetMangaNews(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.News
+            };
+            return await ExecuteGetRequest<MangaNews>(request);
         }
 
         public async Task<MangaPictures> GetMangaPictures(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.Pictures
+            };
+            return await ExecuteGetRequest<MangaPictures>(request);
         }
 
         public async Task<MangaStats> GetMangaStats(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.Stats
+            };
+            return await ExecuteGetRequest<MangaStats>(request);
         }
 
         public async Task<MangaForum> GetMangaForum(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.Forum
+            };
+            return await ExecuteGetRequest<MangaForum>(request);
         }
 
         public async Task<MangaMoreInfo> GetMangaMoreInfo(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Manga,
+                id.ToString(),
+                Constants.MoreInfo
+            };
+            return await ExecuteGetRequest<MangaMoreInfo>(request);
         }
 
         public async Task<Person> GetPerson(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Person,
+                id.ToString()
+            };
+            return await ExecuteGetRequest<Person>(request);
         }
 
         public async Task<PersonPictures> GetPersonPictures(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Person,
+                id.ToString(),
+                Constants.Pictures
+            };
+            return await ExecuteGetRequest<PersonPictures>(request);
         }
 
         public async Task<Character> GetCharacter(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Character,
+                id.ToString()
+            };
+            return await ExecuteGetRequest<Character>(request);
         }
 
         public async Task<CharacterPictures> GetCharacterPictures(int id)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Character,
+                id.ToString(),
+                Constants.Pictures
+            };
+            return await ExecuteGetRequest<CharacterPictures>(request);
         }
 
         public async Task<Season> GetSeason()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Season
+            };
+            return await ExecuteGetRequest<Season>(request);
         }
 
         public async Task<Season> GetSeason(int year, AnimeSeason season)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Season,
+                year.ToString(),
+                season.GetDescription()
+            };
+            return await ExecuteGetRequest<Season>(request);
         }
 
         public async Task<SeasonArchive> GetSeasonArchive()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Season,
+                Constants.SeasonArchive
+            };
+            return await ExecuteGetRequest<SeasonArchive>(request);
         }
 
         public async Task<Schedule> GetSchedule()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Schedule
+            };
+            return await ExecuteGetRequest<Schedule>(request);
         }
 
         public async Task<Schedule> GetSchedule(ScheduleDay day)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Schedule,
+                day.GetDescription()
+            };
+            
+            return await ExecuteGetRequest<Schedule>(request);
         }
 
         public async Task<TopAnime> GetTopAnime()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
         }
 
         public async Task<TopAnime> GetTopAnime(int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
         }
 
         public async Task<TopAnime> GetTopAnime(TopAnimeSubType subType)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
         }
 
         public async Task<TopAnime> GetTopAnime(int page, TopAnimeSubType subType)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString(),
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
         }
 
         public async Task<TopManga> GetTopManga()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime
+            };
+            return await ExecuteGetRequest<TopManga>(request);
         }
 
         public async Task<TopManga> GetTopManga(int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString()
+            };
+            return await ExecuteGetRequest<TopManga>(request);
         }
 
         public async Task<TopManga> GetTopManga(TopMangaSubType subType)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopManga>(request);
         }
 
         public async Task<TopManga> GetTopManga(int page, TopMangaSubType subType)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString(),
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopManga>(request);
         }
 
         public async Task<TopCharacter> GetTopCharacter()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Character
+            };
+            return await ExecuteGetRequest<TopCharacter>(request);
         }
 
         public async Task<TopCharacter> GetTopCharacter(int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Character,
+                page.ToString()
+            };
+            return await ExecuteGetRequest<TopCharacter>(request);
         }
 
         public async Task<TopPeople> GetTopPeople()

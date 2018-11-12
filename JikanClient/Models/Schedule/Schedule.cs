@@ -27,7 +27,8 @@ namespace JikanClient.Models.Schedule
         [JsonProperty(PropertyName = "sunday")]
         public ICollection<AnimeBasic> Sunday { get; set; }
 
-        [JsonProperty(PropertyName = "other")] public ICollection<AnimeBasic> Other { get; set; }
+        [JsonProperty(PropertyName = "other")]
+        public ICollection<AnimeBasic> Other { get; set; }
 
         [JsonProperty(PropertyName = "unknown")]
         public ICollection<AnimeBasic> Unknown { get; set; }
