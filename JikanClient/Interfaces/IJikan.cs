@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using JikanClient.Models.Anime;
 using JikanClient.Models.Character;
 using JikanClient.Models.Genres;
+using JikanClient.Models.Magazines;
 using JikanClient.Models.Manga;
 using JikanClient.Models.Person;
 using JikanClient.Models.Producers;
@@ -107,8 +108,8 @@ namespace JikanClient.Interfaces
 
         Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page);
 
-        Task<AnimeByProducer> GetMangaByMagazine(int magazineId);
+        Task<MangaByMagazine> GetMangaByMagazine(int magazineId);
 
-        Task<AnimeByProducer> GetMangaByMagazine(int magazineId, int page);
+        Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page);
     }
 }

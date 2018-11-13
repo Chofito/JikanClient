@@ -21,5 +21,7 @@ namespace JikanClient.Params
         public static readonly string Season = "season";
         public static readonly string SeasonArchive = "archive";
         public static readonly string Schedule = "schedule";
+        public static readonly string Producer = "producer";
+        public static readonly string Magazine = "magazine";
     }
 }

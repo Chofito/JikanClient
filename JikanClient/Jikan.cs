@@ -8,6 +8,7 @@ using JikanClient.Interfaces;
 using JikanClient.Models.Anime;
 using JikanClient.Models.Character;
 using JikanClient.Models.Genres;
+using JikanClient.Models.Magazines;
 using JikanClient.Models.Manga;
 using JikanClient.Models.Person;
 using JikanClient.Models.Producers;
@@ -483,52 +484,121 @@ namespace JikanClient
 
         public async Task<TopPeople> GetTopPeople()
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.People
+            };
+            return await ExecuteGetRequest<TopPeople>(request);
         }
 
         public async Task<TopPeople> GetTopPeople(int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.People,
+                page.ToString()
+            };
+            return await ExecuteGetRequest<TopPeople>(request);
         }
 
         public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Anime,
+                genre.GetDescription()
+            };
+            return await ExecuteGetRequest<AnimeByGenre>(request);
         }
 
-        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int id)
+        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Anime,
+                genre.GetDescription(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByGenre>(request);
         }
 
         public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Manga,
+                genre.GetDescription()
+            };
+            return await ExecuteGetRequest<MangaByGenre>(request);
         }
 
-        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int id)
+        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Manga,
+                genre.GetDescription(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<MangaByGenre>(request);
         }
 
         public async Task<AnimeByProducer> GetAnimeByProducer(int producerId)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                producerId.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByProducer>(request);
         }
 
         public async Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                producerId.ToString(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByProducer>(request);
         }
 
-        public async Task<AnimeByProducer> GetMangaByMagazine(int magazineId)
+        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                magazineId.ToString()
+            };
+            return await ExecuteGetRequest<MangaByMagazine>(request);
         }
 
-        public async Task<AnimeByProducer> GetMangaByMagazine(int magazineId, int page)
+        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page)
         {
-            throw new System.NotImplementedException();
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                magazineId.ToString(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<MangaByMagazine>(request);
         }
     }
 }

@@ -16,16 +16,23 @@ I will write the basic info later :P
 	- [X] Stats
 	- [X] Mote Info
 - [X] Manga
-	- [x] Basic info
-	- [x] Characters
-	- [x] News
-	- [x] Forum
+	- [X] Basic info
+	- [X] Characters
+	- [X] Pictures
+	- [X] News
+	- [X] Forum
 	- [X] Stats
-	- [X] Mote Info
-- [X] TopAnime
-- [X] TopManga
-- [ ] Characters
-- [ ] Person
+	- [X] More Info
+- [X] Seasons
+- [X] Schedule
+- [X] Top Anime
+- [X] Top Manga
+- [X] Top Characters
+- [X] Top People
+- [X] Characters
+	- [X] Episodes
+- [X] Person
+	- [X] Pictures
 - [ ] Users
 - [ ] Search
-- [ ] Others thinks (I don't remember)
+- [X] Others thinks (I don't remember)
