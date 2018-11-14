@@ -583,7 +583,7 @@ namespace JikanClient
             var request = new string[]
             {
                 "v3",
-                Constants.Producer,
+                Constants.Magazine,
                 magazineId.ToString()
             };
             return await ExecuteGetRequest<MangaByMagazine>(request);
@@ -594,7 +594,7 @@ namespace JikanClient
             var request = new string[]
             {
                 "v3",
-                Constants.Producer,
+                Constants.Magazine,
                 magazineId.ToString(),
                 page.ToString()
             };
