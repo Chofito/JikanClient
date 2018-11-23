@@ -8,9 +8,11 @@ namespace JikanClient.Models.Character
         [JsonProperty(PropertyName = "mal_id")]
         public int? MalId { get; set; }
 
-        [JsonProperty(PropertyName = "url")] public string Url { get; set; }
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
-        [JsonProperty(PropertyName = "name")] public string Name { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "name_kanji")]
         public string NameKanji { get; set; }
@@ -18,7 +20,8 @@ namespace JikanClient.Models.Character
         [JsonProperty(PropertyName = "nicknames")]
         public ICollection<string> Nicknames { get; set; }
 
-        [JsonProperty(PropertyName = "about")] public string About { get; set; }
+        [JsonProperty(PropertyName = "about")]
+        public string About { get; set; }
 
         [JsonProperty(PropertyName = "member_favorites")]
         public int? MemberFavorites { get; set; }

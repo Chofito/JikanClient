@@ -5,6 +5,7 @@ namespace JikanClient.Models.Top
 {
     public class TopCharacter
     {
-        [JsonProperty(PropertyName = "top")] public ICollection<TopCharacterItem> Top { get; set; }
+        [JsonProperty(PropertyName = "top")]
+        public ICollection<TopCharacterItem> Top { get; set; }
     }
 }

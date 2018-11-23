@@ -14,7 +14,8 @@ namespace JikanClient.Models.Common
         [JsonProperty(PropertyName = "Character")]
         public ICollection<MalBasicItem> Characters { get; set; }
 
-        [JsonProperty(PropertyName = "Other")] public ICollection<MalBasicItem> Others { get; set; }
+        [JsonProperty(PropertyName = "Other")]
+        public ICollection<MalBasicItem> Others { get; set; }
 
         [JsonProperty(PropertyName = "Prequel")]
         public ICollection<MalBasicItem> Prequels { get; set; }

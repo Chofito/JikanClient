@@ -11,6 +11,7 @@ namespace JikanClient.Models.Seasons
         [JsonProperty(PropertyName = "season_year")]
         public int? SeasonYear { get; set; }
 
-        [JsonProperty(PropertyName = "anime")] public ICollection<SeasonalAnime> Animes { get; set; }
+        [JsonProperty(PropertyName = "anime")]
+        public ICollection<SeasonalAnime> Animes { get; set; }
     }
 }

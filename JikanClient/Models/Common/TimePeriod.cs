@@ -5,9 +5,11 @@ namespace JikanClient.Models.Common
 {
     public class TimePeriod
     {
-        [JsonProperty(PropertyName = "from")] public DateTime? From { get; set; }
+        [JsonProperty(PropertyName = "from")]
+        public DateTime? From { get; set; }
 
-        [JsonProperty(PropertyName = "to")] public DateTime? To { get; set; }
+        [JsonProperty(PropertyName = "to")]
+        public DateTime? To { get; set; }
 
         [JsonProperty(PropertyName = "string")]
         public string TimePeriodString { get; set; }

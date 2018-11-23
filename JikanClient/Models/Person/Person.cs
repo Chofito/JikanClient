@@ -9,7 +9,8 @@ namespace JikanClient.Models.Person
         [JsonProperty(PropertyName = "mal_id")]
         public int? MalId { get; set; }
 
-        [JsonProperty(PropertyName = "url")] public string Url { get; set; }
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
         [JsonProperty(PropertyName = "image_url")]
         public string ImageUrl { get; set; }
@@ -17,7 +18,8 @@ namespace JikanClient.Models.Person
         [JsonProperty(PropertyName = "web_url")]
         public string WebUrl { get; set; }
 
-        [JsonProperty(PropertyName = "name")] public string Name { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "given_name")]
         public string GivenName { get; set; }
@@ -34,7 +36,8 @@ namespace JikanClient.Models.Person
         [JsonProperty(PropertyName = "member_favorites")]
         public int? MemberFavorites { get; set; }
 
-        [JsonProperty(PropertyName = "about")] public string About { get; set; }
+        [JsonProperty(PropertyName = "about")]
+        public string About { get; set; }
 
         [JsonProperty(PropertyName = "voice_acting_roles")]
         public ICollection<VoiceActingRole> VoiceActingRoles { get; set; }

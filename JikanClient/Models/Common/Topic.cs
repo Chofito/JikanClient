@@ -8,9 +8,11 @@ namespace JikanClient.Models.Common
         [JsonProperty(PropertyName = "topic_id")]
         public int? TopicId { get; set; }
 
-        [JsonProperty(PropertyName = "url")] public string Url { get; set; }
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
-        [JsonProperty(PropertyName = "title")] public string Title { get; set; }
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
 
         [JsonProperty(PropertyName = "date_posted")]
         public DateTime? DatePosted { get; set; }

@@ -1,18 +1,19 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using JikanClient.Connection;
 using JikanClient.EnumExtensions;
 using JikanClient.Exceptions;
 using JikanClient.Interfaces;
-using JikanClient.Models.Anime;
+using JikanClient.Models.AnimeData;
 using JikanClient.Models.Character;
 using JikanClient.Models.Genres;
-using JikanClient.Models.Magazines;
-using JikanClient.Models.Manga;
+using JikanClient.Models.Magazine;
+using JikanClient.Models.MangaData;
 using JikanClient.Models.Person;
 using JikanClient.Models.Producers;
 using JikanClient.Models.Schedule;
+using JikanClient.Models.Search;
 using JikanClient.Models.Seasons;
 using JikanClient.Models.Top;
 using JikanClient.Params;
@@ -23,32 +24,47 @@ namespace JikanClient
 {
     public class Jikan : IJikan
     {
-        private readonly HttpClient _jikanHttpClient;
+        #region Properties
+
+        private static readonly string _jikanLink = "https://api.jikan.moe";
+
+        private static HttpClient _jikanHttpClient = new HttpClient()
+        {
+            BaseAddress = new Uri(_jikanLink)
+        };
+
+        #endregion
+
+        #region Constructors
 
         public Jikan()
         {
-            _jikanHttpClient = HttpProvider.GetJikanHttpClient();
+            _jikanHttpClient.DefaultRequestHeaders.Accept.Clear();
+            _jikanHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<T> ExecuteGetRequest<T>(string[] args) where T : class
+        #endregion
+
+        #region Connection
+
+        private static async Task<T> ExecuteGetRequest<T>(string[] args) where T : class
         {
             T returnedObject;
-            var requestUrl = string.Join("/", args);
+            var request = string.Join("/", args);
 
             try
             {
-                using (var response = await _jikanHttpClient.GetAsync(requestUrl))
+                var response = await _jikanHttpClient.GetAsync(request);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var json = await response.Content.ReadAsStringAsync();
-                        returnedObject = JsonConvert.DeserializeObject<T>(json);
-                    }
-                    else
-                    {
-                        throw new JikanRequestException(string.Format(Errors.FailedRequest, response.Content), response.StatusCode);
-                    }  
+                    var json = await response.Content.ReadAsStringAsync();
+                    returnedObject = JsonConvert.DeserializeObject<T>(json);
                 }
+                else
+                {
+                    throw new JikanRequestException(string.Format(Errors.FailedRequest, response.Content), response.StatusCode);
+                }  
             }
             catch (JsonSerializationException e)
             {
@@ -58,7 +74,11 @@ namespace JikanClient
 
             return returnedObject;
         }
-        
+
+        #endregion
+
+        #region Anime
+
         public async Task<Anime> GetAnime(int id)
         {
             var request = new string[]
@@ -179,6 +199,131 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeMoreInfo>(request);
         }
 
+        public async Task<TopAnime> GetTopAnime()
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
+        }
+
+        public async Task<TopAnime> GetTopAnime(int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
+        }
+
+        public async Task<TopAnime> GetTopAnime(TopAnimeSubType subType)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
+        }
+
+        public async Task<TopAnime> GetTopAnime(int page, TopAnimeSubType subType)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Anime,
+                page.ToString(),
+                subType.GetDescription()
+            };
+            return await ExecuteGetRequest<TopAnime>(request);
+        }
+
+        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Anime,
+                genre.GetDescription()
+            };
+            return await ExecuteGetRequest<AnimeByGenre>(request);
+        }
+
+        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Anime,
+                genre.GetDescription(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByGenre>(request);
+        }
+
+        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Manga,
+                genre.GetDescription()
+            };
+            return await ExecuteGetRequest<MangaByGenre>(request);
+        }
+
+        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Genre,
+                Constants.Manga,
+                genre.GetDescription(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<MangaByGenre>(request);
+        }
+
+        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                producerId.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByProducer>(request);
+        }
+
+        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Producer,
+                producerId.ToString(),
+                page.ToString()
+            };
+            return await ExecuteGetRequest<AnimeByProducer>(request);
+        }
+
+        #endregion
+
+        #region Manga
+
         public async Task<Manga> GetManga(int id)
         {
             var request = new string[]
@@ -262,155 +407,6 @@ namespace JikanClient
             return await ExecuteGetRequest<MangaMoreInfo>(request);
         }
 
-        public async Task<Person> GetPerson(int id)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Person,
-                id.ToString()
-            };
-            return await ExecuteGetRequest<Person>(request);
-        }
-
-        public async Task<PersonPictures> GetPersonPictures(int id)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Person,
-                id.ToString(),
-                Constants.Pictures
-            };
-            return await ExecuteGetRequest<PersonPictures>(request);
-        }
-
-        public async Task<Character> GetCharacter(int id)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Character,
-                id.ToString()
-            };
-            return await ExecuteGetRequest<Character>(request);
-        }
-
-        public async Task<CharacterPictures> GetCharacterPictures(int id)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Character,
-                id.ToString(),
-                Constants.Pictures
-            };
-            return await ExecuteGetRequest<CharacterPictures>(request);
-        }
-
-        public async Task<Season> GetSeason()
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Season
-            };
-            return await ExecuteGetRequest<Season>(request);
-        }
-
-        public async Task<Season> GetSeason(int year, AnimeSeason season)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Season,
-                year.ToString(),
-                season.GetDescription()
-            };
-            return await ExecuteGetRequest<Season>(request);
-        }
-
-        public async Task<SeasonArchive> GetSeasonArchive()
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Season,
-                Constants.SeasonArchive
-            };
-            return await ExecuteGetRequest<SeasonArchive>(request);
-        }
-
-        public async Task<Schedule> GetSchedule()
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Schedule
-            };
-            return await ExecuteGetRequest<Schedule>(request);
-        }
-
-        public async Task<Schedule> GetSchedule(ScheduleDay day)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Schedule,
-                day.GetDescription()
-            };
-            
-            return await ExecuteGetRequest<Schedule>(request);
-        }
-
-        public async Task<TopAnime> GetTopAnime()
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Top,
-                Constants.Anime
-            };
-            return await ExecuteGetRequest<TopAnime>(request);
-        }
-
-        public async Task<TopAnime> GetTopAnime(int page)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Top,
-                Constants.Anime,
-                page.ToString()
-            };
-            return await ExecuteGetRequest<TopAnime>(request);
-        }
-
-        public async Task<TopAnime> GetTopAnime(TopAnimeSubType subType)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Top,
-                Constants.Anime,
-                subType.GetDescription()
-            };
-            return await ExecuteGetRequest<TopAnime>(request);
-        }
-
-        public async Task<TopAnime> GetTopAnime(int page, TopAnimeSubType subType)
-        {
-            var request = new string[]
-            {
-                "v3",
-                Constants.Top,
-                Constants.Anime,
-                page.ToString(),
-                subType.GetDescription()
-            };
-            return await ExecuteGetRequest<TopAnime>(request);
-        }
-
         public async Task<TopManga> GetTopManga()
         {
             var request = new string[]
@@ -459,27 +455,54 @@ namespace JikanClient
             return await ExecuteGetRequest<TopManga>(request);
         }
 
-        public async Task<TopCharacter> GetTopCharacter()
+        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Top,
-                Constants.Character
+                Constants.Magazine,
+                magazineId.ToString()
             };
-            return await ExecuteGetRequest<TopCharacter>(request);
+            return await ExecuteGetRequest<MangaByMagazine>(request);
         }
 
-        public async Task<TopCharacter> GetTopCharacter(int page)
+        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Top,
-                Constants.Character,
+                Constants.Magazine,
+                magazineId.ToString(),
                 page.ToString()
             };
-            return await ExecuteGetRequest<TopCharacter>(request);
+            return await ExecuteGetRequest<MangaByMagazine>(request);
+        }
+
+        #endregion
+
+        #region Person
+
+        public async Task<Person> GetPerson(int id)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Person,
+                id.ToString()
+            };
+            return await ExecuteGetRequest<Person>(request);
+        }
+
+        public async Task<PersonPictures> GetPersonPictures(int id)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Person,
+                id.ToString(),
+                Constants.Pictures
+            };
+            return await ExecuteGetRequest<PersonPictures>(request);
         }
 
         public async Task<TopPeople> GetTopPeople()
@@ -505,100 +528,211 @@ namespace JikanClient
             return await ExecuteGetRequest<TopPeople>(request);
         }
 
-        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre)
+        #endregion
+
+        #region Character
+
+        public async Task<Character> GetCharacter(int id)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Genre,
-                Constants.Anime,
-                genre.GetDescription()
+                Constants.Character,
+                id.ToString()
             };
-            return await ExecuteGetRequest<AnimeByGenre>(request);
+            return await ExecuteGetRequest<Character>(request);
         }
 
-        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int page)
+        public async Task<CharacterPictures> GetCharacterPictures(int id)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Genre,
-                Constants.Anime,
-                genre.GetDescription(),
+                Constants.Character,
+                id.ToString(),
+                Constants.Pictures
+            };
+            return await ExecuteGetRequest<CharacterPictures>(request);
+        }
+
+        public async Task<TopCharacter> GetTopCharacter()
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Character
+            };
+            return await ExecuteGetRequest<TopCharacter>(request);
+        }
+
+        public async Task<TopCharacter> GetTopCharacter(int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Top,
+                Constants.Character,
                 page.ToString()
             };
-            return await ExecuteGetRequest<AnimeByGenre>(request);
+            return await ExecuteGetRequest<TopCharacter>(request);
         }
 
-        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre)
+        #endregion
+
+        #region Seasons
+
+        public async Task<Season> GetSeason()
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Genre,
-                Constants.Manga,
-                genre.GetDescription()
+                Constants.Season
             };
-            return await ExecuteGetRequest<MangaByGenre>(request);
+            return await ExecuteGetRequest<Season>(request);
         }
 
-        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int page)
+        public async Task<Season> GetSeason(int year, AnimeSeason season)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Genre,
-                Constants.Manga,
-                genre.GetDescription(),
-                page.ToString()
+                Constants.Season,
+                year.ToString(),
+                season.GetDescription()
             };
-            return await ExecuteGetRequest<MangaByGenre>(request);
+            return await ExecuteGetRequest<Season>(request);
         }
 
-        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId)
+        public async Task<SeasonArchive> GetSeasonArchive()
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Producer,
-                producerId.ToString()
+                Constants.Season,
+                Constants.SeasonArchive
             };
-            return await ExecuteGetRequest<AnimeByProducer>(request);
+            return await ExecuteGetRequest<SeasonArchive>(request);
         }
 
-        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page)
+        #endregion
+
+        #region Schedule
+
+        public async Task<Schedule> GetSchedule()
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Producer,
-                producerId.ToString(),
-                page.ToString()
+                Constants.Schedule
             };
-            return await ExecuteGetRequest<AnimeByProducer>(request);
+            return await ExecuteGetRequest<Schedule>(request);
         }
 
-        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId)
+        public async Task<Schedule> GetSchedule(ScheduleDay day)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Magazine,
-                magazineId.ToString()
+                Constants.Schedule,
+                day.GetDescription()
             };
-            return await ExecuteGetRequest<MangaByMagazine>(request);
+            
+            return await ExecuteGetRequest<Schedule>(request);
         }
 
-        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page)
+        #endregion
+
+        #region Searchs
+
+        public async Task<AnimeSearchResult> SearchAnime(string query)
         {
             var request = new string[]
             {
                 "v3",
-                Constants.Magazine,
-                magazineId.ToString(),
-                page.ToString()
+                Constants.Search,
+                $"anime?q={query}"
             };
-            return await ExecuteGetRequest<MangaByMagazine>(request);
+            return await ExecuteGetRequest<AnimeSearchResult>(request);
         }
+
+        public async Task<AnimeSearchResult> SearchAnime(string query, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"anime?q={query}&page={page}"
+            };
+            return await ExecuteGetRequest<AnimeSearchResult>(request);
+        }
+
+        public async Task<MangaSearchResult> SearchManga(string query)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"manga?q={query}"
+            };
+            return await ExecuteGetRequest<MangaSearchResult>(request);
+        }
+
+        public async Task<MangaSearchResult> SearchManga(string query, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"manga?q={query}&page={page}"
+            };
+            return await ExecuteGetRequest<MangaSearchResult>(request);
+        }
+
+        public async Task<PersonSearchResult> SearchPerson(string query)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"person?q={query}"
+            };
+            return await ExecuteGetRequest<PersonSearchResult>(request);
+        }
+
+        public async Task<PersonSearchResult> SearchPerson(string query, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"person?q={query}&page={page}"
+            };
+            return await ExecuteGetRequest<PersonSearchResult>(request);
+        }
+
+        public async Task<CharacterSearchResult> SearchCharacter(string query)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"character?q={query}"
+            };
+            return await ExecuteGetRequest<CharacterSearchResult>(request);
+        }
+
+        public async Task<CharacterSearchResult> SearchCharacter(string query, int page)
+        {
+            var request = new string[]
+            {
+                "v3",
+                Constants.Search,
+                $"character?q={query}&page={page}"
+            };
+            return await ExecuteGetRequest<CharacterSearchResult>(request);
+        }
+
+        #endregion
     }
 }

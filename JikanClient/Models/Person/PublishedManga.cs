@@ -9,6 +9,7 @@ namespace JikanClient.Models.Person
         [JsonProperty(PropertyName = "position")]
         public string Position { get; set; }
 
-        [JsonProperty(PropertyName = "manga")] public ICollection<MangaMeta> Mangas { get; set; }
+        [JsonProperty(PropertyName = "manga")]
+        public ICollection<MangaMeta> Mangas { get; set; }
     }
 }

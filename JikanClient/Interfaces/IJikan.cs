@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
-using JikanClient.Models.Anime;
+using JikanClient.Models.AnimeData;
 using JikanClient.Models.Character;
 using JikanClient.Models.Genres;
-using JikanClient.Models.Magazines;
-using JikanClient.Models.Manga;
+using JikanClient.Models.Magazine;
+using JikanClient.Models.MangaData;
 using JikanClient.Models.Person;
 using JikanClient.Models.Producers;
 using JikanClient.Models.Schedule;
+using JikanClient.Models.Search;
 using JikanClient.Models.Seasons;
 using JikanClient.Models.Top;
 using JikanClient.Params;
@@ -15,11 +16,6 @@ namespace JikanClient.Interfaces
 {
     public interface IJikan
     {
-        /// <summary>
-        ///     Este metodo permite obtener la informacion basica de un anime.
-        /// </summary>
-        /// <param name="id">El id del anime en MAL.</param>
-        /// <returns>Retorna un objeto con todos sus detalles.</returns>
         Task<Anime> GetAnime(int id);
 
         Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaff(int id);
@@ -111,5 +107,21 @@ namespace JikanClient.Interfaces
         Task<MangaByMagazine> GetMangaByMagazine(int magazineId);
 
         Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page);
+
+        Task<AnimeSearchResult> SearchAnime(string query);
+
+        Task<AnimeSearchResult> SearchAnime(string query, int page);
+
+        Task<MangaSearchResult> SearchManga(string query);
+                                     
+        Task<MangaSearchResult> SearchManga(string query, int page);
+
+        Task<PersonSearchResult> SearchPerson(string query);
+                                      
+        Task<PersonSearchResult> SearchPerson(string query, int page);
+
+        Task<CharacterSearchResult> SearchCharacter(string query);
+                                     
+        Task<CharacterSearchResult> SearchCharacter(string query, int page);
     }
 }

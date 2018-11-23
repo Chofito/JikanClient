@@ -12,6 +12,7 @@ namespace JikanClient.Models.SearchBy
         [JsonProperty(PropertyName = "item_count")]
         public int? ItemCount { get; set; }
 
-        [JsonProperty(PropertyName = "anime")] public ICollection<AnimeBasic> Animes { get; set; }
+        [JsonProperty(PropertyName = "anime")]
+        public ICollection<AnimeBasic> Animes { get; set; }
     }
 }

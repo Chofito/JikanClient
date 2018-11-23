@@ -9,11 +9,14 @@ namespace JikanClient.Models.Top
         [JsonProperty(PropertyName = "mal_id")]
         public int? MalId { get; set; }
 
-        [JsonProperty(PropertyName = "rank")] public int? Rank { get; set; }
+        [JsonProperty(PropertyName = "rank")]
+        public int? Rank { get; set; }
 
-        [JsonProperty(PropertyName = "title")] public string Title { get; set; }
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
 
-        [JsonProperty(PropertyName = "url")] public string Url { get; set; }
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
         [JsonProperty(PropertyName = "name_kanji")]
         public string NameKanji { get; set; }
