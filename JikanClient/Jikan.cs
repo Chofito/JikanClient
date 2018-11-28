@@ -34,10 +34,7 @@ namespace JikanClient
         private static readonly string _jikanLinkHttps = "https://api.jikan.moe";
         private static readonly string _jikanLinkHttp = "http://api.jikan.moe";
 
-        private static readonly HttpClient JikanHttpClient = new HttpClient()
-        {
-            BaseAddress = new Uri(_jikanLinkHttps)
-        };
+        private static readonly HttpClient JikanHttpClient = new HttpClient();
 
         #endregion
 
