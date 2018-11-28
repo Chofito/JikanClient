@@ -37,7 +37,7 @@ JikanClient is a .NET wrapper for [Jikan](https://jikan.moe/) RESTful API for pa
 	- [X] Episodes
 - [X] Person
 	- [X] Pictures
-- [X] Users
+- [ ] Users ~~Not implemented~~
 - [ ] Search ~~Partial Support~~
 
 # Usage
