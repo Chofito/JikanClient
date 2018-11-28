@@ -6,6 +6,6 @@ namespace JikanClient.Models.Search
     public class AnimeSearchResult
     {
         [JsonProperty(PropertyName = "results")]
-        public ICollection<AnimeSearchEntry> Results { get; set; }
+        public ICollection<AnimeSearchEntry> SearchResults { get; set; }
     }
 }

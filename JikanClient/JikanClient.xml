@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JikanClient</name>
+    </assembly>
+    <members>
+        <member name="T:JikanClient.Jikan">
+            <summary>
+            The main class.
+            Contains all methods for get data from MAL.
+            </summary>
+        </member>
+        <member name="M:JikanClient.Jikan.#ctor(System.Boolean)">
+            <summary>
+            Constructor for JikanClient.
+            </summary>
+            <param name="secure">True if you want to use HTTPS, false for HTTP, by default is true.</param>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnime(System.Int32)">
+            <summary>
+            Get Anime Information from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return Anime Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeCharactersAndStaff(System.Int32)">
+            <summary>
+            Get Anime Characters And Staff information from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeCharactersAndStaff Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeEpisodes(System.Int32)">
+            <summary>
+            Get Anime Episodes information from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeEpisodes Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeEpisodes(System.Int32,System.Int32)">
+            <summary>
+            Get Anime Episodes information from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <param name="page">
+            The episodes page on MyAnimeList get paginated after 100 episodes.
+            If there's an anime with more than 100 episodes, you'll have to use the parameter.
+            </param>
+            <returns>Return AnimeEpisodes Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeNews(System.Int32)">
+            <summary>
+            Get Anime News from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeNews Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimePictures(System.Int32)">
+            <summary>
+            Get Anime Pictures URL's from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimePictures Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeVideos(System.Int32)">
+            <summary>
+            Get Anime Videos URL's from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeVideos Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeStats(System.Int32)">
+            <summary>
+            Get Anime Statistics from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeStats Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeForum(System.Int32)">
+            <summary>
+            Get Anime Forum's post from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeForum Object</returns>
+        </member>
+        <member name="M:JikanClient.Jikan.GetAnimeMoreInfo(System.Int32)">
+            <summary>
+            Get Anime extra infromation from MyAnimeList
+            </summary>
+            <param name="id">Anime ID from MAL</param>
+            <returns>Return AnimeMoreInfo Object</returns>
+        </member>
+        <member name="T:JikanClient.Resource.Errors">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:JikanClient.Resource.Errors.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:JikanClient.Resource.Errors.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:JikanClient.Resource.Errors.FailedRequest">
+            <summary>
+              Looks up a localized string similar to GET request failed. Inner message: {0}.
+            </summary>
+        </member>
+        <member name="P:JikanClient.Resource.Errors.NotEnum">
+            <summary>
+              Looks up a localized string similar to EnumerationValue must be of Enum type.
+            </summary>
+        </member>
+        <member name="P:JikanClient.Resource.Errors.SerializationFailed">
+            <summary>
+              Looks up a localized string similar to Serialization failed..
+            </summary>
+        </member>
+    </members>
+</doc>

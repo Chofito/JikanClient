@@ -22,25 +22,36 @@ using Newtonsoft.Json;
 
 namespace JikanClient
 {
+
+    /// <summary>
+    /// The main class.
+    /// Contains all methods for get data from MAL.
+    /// </summary>
     public class Jikan : IJikan
     {
         #region Properties
 
-        private static readonly string _jikanLink = "https://api.jikan.moe";
+        private static readonly string _jikanLinkHttps = "https://api.jikan.moe";
+        private static readonly string _jikanLinkHttp = "http://api.jikan.moe";
 
-        private static HttpClient _jikanHttpClient = new HttpClient()
+        private static readonly HttpClient JikanHttpClient = new HttpClient()
         {
-            BaseAddress = new Uri(_jikanLink)
+            BaseAddress = new Uri(_jikanLinkHttps)
         };
 
         #endregion
 
         #region Constructors
 
-        public Jikan()
+        /// <summary>
+        /// Constructor for JikanClient.
+        /// </summary>
+        /// <param name="secure">True if you want to use HTTPS, false for HTTP, by default is true.</param>
+        public Jikan(bool secure = true)
         {
-            _jikanHttpClient.DefaultRequestHeaders.Accept.Clear();
-            _jikanHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            JikanHttpClient.BaseAddress = secure ? new Uri(_jikanLinkHttps) : new Uri(_jikanLinkHttp);
+            JikanHttpClient.DefaultRequestHeaders.Accept.Clear();
+            JikanHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         #endregion
@@ -50,11 +61,11 @@ namespace JikanClient
         private static async Task<T> ExecuteGetRequest<T>(string[] args) where T : class
         {
             T returnedObject;
-            var request = string.Join("/", args);
+            var request = Uri.EscapeUriString(string.Join("/", args));
 
             try
             {
-                var response = await _jikanHttpClient.GetAsync(request);
+                var response = await JikanHttpClient.GetAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -79,6 +90,11 @@ namespace JikanClient
 
         #region Anime
 
+        /// <summary>
+        /// Get Anime Information from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return Anime Object</returns>
         public async Task<Anime> GetAnime(int id)
         {
             var request = new string[]
@@ -90,6 +106,11 @@ namespace JikanClient
             return await ExecuteGetRequest<Anime>(request);
         }
 
+        /// <summary>
+        /// Get Anime Characters And Staff information from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeCharactersAndStaff Object</returns>
         public async Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaff(int id)
         {
             var request = new string[]
@@ -102,6 +123,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeCharactersAndStaff>(request);
         }
 
+        /// <summary>
+        /// Get Anime Episodes information from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeEpisodes Object</returns>
         public async Task<AnimeEpisodes> GetAnimeEpisodes(int id)
         {
             var request = new string[]
@@ -114,6 +140,15 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeEpisodes>(request);
         }
 
+        /// <summary>
+        /// Get Anime Episodes information from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <param name="page">
+        /// The episodes page on MyAnimeList get paginated after 100 episodes.
+        /// If there's an anime with more than 100 episodes, you'll have to use the parameter.
+        /// </param>
+        /// <returns>Return AnimeEpisodes Object</returns>
         public async Task<AnimeEpisodes> GetAnimeEpisodes(int id, int page)
         {
             var request = new string[]
@@ -127,6 +162,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeEpisodes>(request);
         }
 
+        /// <summary>
+        /// Get Anime News from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeNews Object</returns>
         public async Task<AnimeNews> GetAnimeNews(int id)
         {
             var request = new string[]
@@ -139,6 +179,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeNews>(request);
         }
 
+        /// <summary>
+        /// Get Anime Pictures URL's from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimePictures Object</returns>
         public async Task<AnimePictures> GetAnimePictures(int id)
         {
             var request = new string[]
@@ -151,6 +196,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimePictures>(request);
         }
 
+        /// <summary>
+        /// Get Anime Videos URL's from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeVideos Object</returns>
         public async Task<AnimeVideos> GetAnimeVideos(int id)
         {
             var request = new string[]
@@ -163,6 +213,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeVideos>(request);
         }
 
+        /// <summary>
+        /// Get Anime Statistics from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeStats Object</returns>
         public async Task<AnimeStats> GetAnimeStats(int id)
         {
             var request = new string[]
@@ -175,6 +230,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeStats>(request);
         }
 
+        /// <summary>
+        /// Get Anime Forum's post from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeForum Object</returns>
         public async Task<AnimeForum> GetAnimeForum(int id)
         {
             var request = new string[]
@@ -187,6 +247,11 @@ namespace JikanClient
             return await ExecuteGetRequest<AnimeForum>(request);
         }
 
+        /// <summary>
+        /// Get Anime extra infromation from MyAnimeList
+        /// </summary>
+        /// <param name="id">Anime ID from MAL</param>
+        /// <returns>Return AnimeMoreInfo Object</returns>
         public async Task<AnimeMoreInfo> GetAnimeMoreInfo(int id)
         {
             var request = new string[]
