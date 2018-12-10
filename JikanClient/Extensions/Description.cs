@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
-namespace JikanClient.EnumExtensions
+namespace JikanClient.Extensions
 {
-    internal static class EnumDescription
+    internal static class Description
     {
         public static string GetDescription<T>(this T e) where T : IConvertible
         {

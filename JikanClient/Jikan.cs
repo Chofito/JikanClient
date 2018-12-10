@@ -2,8 +2,8 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using JikanClient.EnumExtensions;
 using JikanClient.Exceptions;
+using JikanClient.Extensions;
 using JikanClient.Interfaces;
 using JikanClient.Models.AnimeData;
 using JikanClient.Models.Character;
@@ -22,26 +22,16 @@ using Newtonsoft.Json;
 
 namespace JikanClient
 {
-
     /// <summary>
-    /// The main class.
-    /// Contains all methods for get data from MAL.
+    ///     The main class.
+    ///     Contains all methods for get data from MAL.
     /// </summary>
     public class Jikan : IJikan
     {
-        #region Properties
-
-        private static readonly string _jikanLinkHttps = "https://api.jikan.moe";
-        private static readonly string _jikanLinkHttp = "http://api.jikan.moe";
-
-        private static readonly HttpClient JikanHttpClient = new HttpClient();
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
-        /// Constructor for JikanClient.
+        ///     Constructor for JikanClient.
         /// </summary>
         /// <param name="secure">True if you want to use HTTPS, false for HTTP, by default is true.</param>
         public Jikan(bool secure = true)
@@ -55,10 +45,10 @@ namespace JikanClient
 
         #region Connection
 
-        private static async Task<T> ExecuteGetRequest<T>(string[] args) where T : class
+        private static async Task<T> ExecuteGetRequestAsync<T>(string[] args) where T : class
         {
             T returnedObject;
-            var request = Uri.EscapeUriString(string.Join("/", args));
+            var request = "v3/" + Uri.EscapeUriString(string.Join("/", args));
 
             try
             {
@@ -67,17 +57,18 @@ namespace JikanClient
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
-                    returnedObject = JsonConvert.DeserializeObject<T>(json);
+                    returnedObject = await Task.Run(() => JsonConvert.DeserializeObject<T>(json));
                 }
                 else
                 {
-                    throw new JikanRequestException(string.Format(Errors.FailedRequest, response.Content), response.StatusCode);
-                }  
+                    throw new JikanRequestException(string.Format(Errors.FailedRequest, response.Content),
+                        response.StatusCode);
+                }
             }
             catch (JsonSerializationException e)
             {
-                throw new JikanRequestException(Errors.SerializationFailed + Environment.NewLine + "Inner exception message: " + e.Message);
-
+                throw new JikanRequestException(Errors.SerializationFailed + Environment.NewLine +
+                                                "Inner exception message: " + e.Message);
             }
 
             return returnedObject;
@@ -85,714 +76,669 @@ namespace JikanClient
 
         #endregion
 
+        #region Properties
+
+        private static readonly string _jikanLinkHttps = "https://api.jikan.moe";
+        private static readonly string _jikanLinkHttp = "http://api.jikan.moe";
+
+        private static readonly HttpClient JikanHttpClient = new HttpClient();
+
+        #endregion
+
         #region Anime
 
         /// <summary>
-        /// Get Anime Information from MyAnimeList
+        ///     Get Anime Information from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return Anime Object</returns>
-        public async Task<Anime> GetAnime(int id)
+        public async Task<Anime> GetAnimeAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString()
             };
-            return await ExecuteGetRequest<Anime>(request);
+            return await ExecuteGetRequestAsync<Anime>(request);
         }
 
         /// <summary>
-        /// Get Anime Characters And Staff information from MyAnimeList
+        ///     Get Anime Characters And Staff information from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeCharactersAndStaff Object</returns>
-        public async Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaff(int id)
+        public async Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaffAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.AnimeCharactersStaff
             };
-            return await ExecuteGetRequest<AnimeCharactersAndStaff>(request);
+            return await ExecuteGetRequestAsync<AnimeCharactersAndStaff>(request);
         }
 
         /// <summary>
-        /// Get Anime Episodes information from MyAnimeList
+        ///     Get Anime Episodes information from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeEpisodes Object</returns>
-        public async Task<AnimeEpisodes> GetAnimeEpisodes(int id)
+        public async Task<AnimeEpisodes> GetAnimeEpisodesAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Episodes
             };
-            return await ExecuteGetRequest<AnimeEpisodes>(request);
+            return await ExecuteGetRequestAsync<AnimeEpisodes>(request);
         }
 
         /// <summary>
-        /// Get Anime Episodes information from MyAnimeList
+        ///     Get Anime Episodes information from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <param name="page">
-        /// The episodes page on MyAnimeList get paginated after 100 episodes.
-        /// If there's an anime with more than 100 episodes, you'll have to use the parameter.
+        ///     The episodes page on MyAnimeList get paginated after 100 episodes.
+        ///     If there's an anime with more than 100 episodes, you'll have to use the parameter.
         /// </param>
         /// <returns>Return AnimeEpisodes Object</returns>
-        public async Task<AnimeEpisodes> GetAnimeEpisodes(int id, int page)
+        public async Task<AnimeEpisodes> GetAnimeEpisodesAsync(int id, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Episodes,
                 page.ToString()
             };
-            return await ExecuteGetRequest<AnimeEpisodes>(request);
+            return await ExecuteGetRequestAsync<AnimeEpisodes>(request);
         }
 
         /// <summary>
-        /// Get Anime News from MyAnimeList
+        ///     Get Anime News from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeNews Object</returns>
-        public async Task<AnimeNews> GetAnimeNews(int id)
+        public async Task<AnimeNews> GetAnimeNewsAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.News
             };
-            return await ExecuteGetRequest<AnimeNews>(request);
+            return await ExecuteGetRequestAsync<AnimeNews>(request);
         }
 
         /// <summary>
-        /// Get Anime Pictures URL's from MyAnimeList
+        ///     Get Anime Pictures URL's from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimePictures Object</returns>
-        public async Task<AnimePictures> GetAnimePictures(int id)
+        public async Task<AnimePictures> GetAnimePicturesAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Pictures
             };
-            return await ExecuteGetRequest<AnimePictures>(request);
+            return await ExecuteGetRequestAsync<AnimePictures>(request);
         }
 
         /// <summary>
-        /// Get Anime Videos URL's from MyAnimeList
+        ///     Get Anime Videos URL's from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeVideos Object</returns>
-        public async Task<AnimeVideos> GetAnimeVideos(int id)
+        public async Task<AnimeVideos> GetAnimeVideosAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Videos
             };
-            return await ExecuteGetRequest<AnimeVideos>(request);
+            return await ExecuteGetRequestAsync<AnimeVideos>(request);
         }
 
         /// <summary>
-        /// Get Anime Statistics from MyAnimeList
+        ///     Get Anime Statistics from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeStats Object</returns>
-        public async Task<AnimeStats> GetAnimeStats(int id)
+        public async Task<AnimeStats> GetAnimeStatsAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Stats
             };
-            return await ExecuteGetRequest<AnimeStats>(request);
+            return await ExecuteGetRequestAsync<AnimeStats>(request);
         }
 
         /// <summary>
-        /// Get Anime Forum's post from MyAnimeList
+        ///     Get Anime Forum's post from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeForum Object</returns>
-        public async Task<AnimeForum> GetAnimeForum(int id)
+        public async Task<AnimeForum> GetAnimeForumAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.Forum
             };
-            return await ExecuteGetRequest<AnimeForum>(request);
+            return await ExecuteGetRequestAsync<AnimeForum>(request);
         }
 
         /// <summary>
-        /// Get Anime extra infromation from MyAnimeList
+        ///     Get Anime extra infromation from MyAnimeList
         /// </summary>
         /// <param name="id">Anime ID from MAL</param>
         /// <returns>Return AnimeMoreInfo Object</returns>
-        public async Task<AnimeMoreInfo> GetAnimeMoreInfo(int id)
+        public async Task<AnimeMoreInfo> GetAnimeMoreInfoAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Anime,
                 id.ToString(),
                 Constants.MoreInfo
             };
-            return await ExecuteGetRequest<AnimeMoreInfo>(request);
+            return await ExecuteGetRequestAsync<AnimeMoreInfo>(request);
         }
 
-        public async Task<TopAnime> GetTopAnime()
+        public async Task<TopAnime> GetTopAnimeAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime
             };
-            return await ExecuteGetRequest<TopAnime>(request);
+            return await ExecuteGetRequestAsync<TopAnime>(request);
         }
 
-        public async Task<TopAnime> GetTopAnime(int page)
+        public async Task<TopAnime> GetTopAnimeAsync(int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 page.ToString()
             };
-            return await ExecuteGetRequest<TopAnime>(request);
+            return await ExecuteGetRequestAsync<TopAnime>(request);
         }
 
-        public async Task<TopAnime> GetTopAnime(TopAnimeSubType subType)
+        public async Task<TopAnime> GetTopAnimeAsync(TopAnimeSubType subType)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 subType.GetDescription()
             };
-            return await ExecuteGetRequest<TopAnime>(request);
+            return await ExecuteGetRequestAsync<TopAnime>(request);
         }
 
-        public async Task<TopAnime> GetTopAnime(int page, TopAnimeSubType subType)
+        public async Task<TopAnime> GetTopAnimeAsync(int page, TopAnimeSubType subType)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 page.ToString(),
                 subType.GetDescription()
             };
-            return await ExecuteGetRequest<TopAnime>(request);
+            return await ExecuteGetRequestAsync<TopAnime>(request);
         }
 
-        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre)
+        public async Task<AnimeByGenre> GetAnimeByGenreAsync(AnimeGenre genre)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Genre,
                 Constants.Anime,
                 genre.GetDescription()
             };
-            return await ExecuteGetRequest<AnimeByGenre>(request);
+            return await ExecuteGetRequestAsync<AnimeByGenre>(request);
         }
 
-        public async Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int page)
+        public async Task<AnimeByGenre> GetAnimeByGenreAsync(AnimeGenre genre, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Genre,
                 Constants.Anime,
                 genre.GetDescription(),
                 page.ToString()
             };
-            return await ExecuteGetRequest<AnimeByGenre>(request);
+            return await ExecuteGetRequestAsync<AnimeByGenre>(request);
         }
 
-        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre)
+        public async Task<MangaByGenre> GetMangaByGenreAsync(MangaGenre genre)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Genre,
                 Constants.Manga,
                 genre.GetDescription()
             };
-            return await ExecuteGetRequest<MangaByGenre>(request);
+            return await ExecuteGetRequestAsync<MangaByGenre>(request);
         }
 
-        public async Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int page)
+        public async Task<MangaByGenre> GetMangaByGenreAsync(MangaGenre genre, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Genre,
                 Constants.Manga,
                 genre.GetDescription(),
                 page.ToString()
             };
-            return await ExecuteGetRequest<MangaByGenre>(request);
+            return await ExecuteGetRequestAsync<MangaByGenre>(request);
         }
 
-        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId)
+        public async Task<AnimeByProducer> GetAnimeByProducerAsync(int producerId)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Producer,
                 producerId.ToString()
             };
-            return await ExecuteGetRequest<AnimeByProducer>(request);
+            return await ExecuteGetRequestAsync<AnimeByProducer>(request);
         }
 
-        public async Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page)
+        public async Task<AnimeByProducer> GetAnimeByProducerAsync(int producerId, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Producer,
                 producerId.ToString(),
                 page.ToString()
             };
-            return await ExecuteGetRequest<AnimeByProducer>(request);
+            return await ExecuteGetRequestAsync<AnimeByProducer>(request);
         }
 
         #endregion
 
         #region Manga
 
-        public async Task<Manga> GetManga(int id)
+        public async Task<Manga> GetMangaAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString()
             };
-            return await ExecuteGetRequest<Manga>(request);
+            return await ExecuteGetRequestAsync<Manga>(request);
         }
 
-        public async Task<MangaCharacters> GetMangaCharacters(int id)
+        public async Task<MangaCharacters> GetMangaCharactersAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.MangaCharacters
             };
-            return await ExecuteGetRequest<MangaCharacters>(request);
+            return await ExecuteGetRequestAsync<MangaCharacters>(request);
         }
 
-        public async Task<MangaNews> GetMangaNews(int id)
+        public async Task<MangaNews> GetMangaNewsAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.News
             };
-            return await ExecuteGetRequest<MangaNews>(request);
+            return await ExecuteGetRequestAsync<MangaNews>(request);
         }
 
-        public async Task<MangaPictures> GetMangaPictures(int id)
+        public async Task<MangaPictures> GetMangaPicturesAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.Pictures
             };
-            return await ExecuteGetRequest<MangaPictures>(request);
+            return await ExecuteGetRequestAsync<MangaPictures>(request);
         }
 
-        public async Task<MangaStats> GetMangaStats(int id)
+        public async Task<MangaStats> GetMangaStatsAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.Stats
             };
-            return await ExecuteGetRequest<MangaStats>(request);
+            return await ExecuteGetRequestAsync<MangaStats>(request);
         }
 
-        public async Task<MangaForum> GetMangaForum(int id)
+        public async Task<MangaForum> GetMangaForumAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.Forum
             };
-            return await ExecuteGetRequest<MangaForum>(request);
+            return await ExecuteGetRequestAsync<MangaForum>(request);
         }
 
-        public async Task<MangaMoreInfo> GetMangaMoreInfo(int id)
+        public async Task<MangaMoreInfo> GetMangaMoreInfoAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Manga,
                 id.ToString(),
                 Constants.MoreInfo
             };
-            return await ExecuteGetRequest<MangaMoreInfo>(request);
+            return await ExecuteGetRequestAsync<MangaMoreInfo>(request);
         }
 
-        public async Task<TopManga> GetTopManga()
+        public async Task<TopManga> GetTopMangaAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime
             };
-            return await ExecuteGetRequest<TopManga>(request);
+            return await ExecuteGetRequestAsync<TopManga>(request);
         }
 
-        public async Task<TopManga> GetTopManga(int page)
+        public async Task<TopManga> GetTopMangaAsync(int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 page.ToString()
             };
-            return await ExecuteGetRequest<TopManga>(request);
+            return await ExecuteGetRequestAsync<TopManga>(request);
         }
 
-        public async Task<TopManga> GetTopManga(TopMangaSubType subType)
+        public async Task<TopManga> GetTopMangaAsync(TopMangaSubType subType)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 subType.GetDescription()
             };
-            return await ExecuteGetRequest<TopManga>(request);
+            return await ExecuteGetRequestAsync<TopManga>(request);
         }
 
-        public async Task<TopManga> GetTopManga(int page, TopMangaSubType subType)
+        public async Task<TopManga> GetTopMangaAsync(int page, TopMangaSubType subType)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Anime,
                 page.ToString(),
                 subType.GetDescription()
             };
-            return await ExecuteGetRequest<TopManga>(request);
+            return await ExecuteGetRequestAsync<TopManga>(request);
         }
 
-        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId)
+        public async Task<MangaByMagazine> GetMangaByMagazineAsync(int magazineId)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Magazine,
                 magazineId.ToString()
             };
-            return await ExecuteGetRequest<MangaByMagazine>(request);
+            return await ExecuteGetRequestAsync<MangaByMagazine>(request);
         }
 
-        public async Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page)
+        public async Task<MangaByMagazine> GetMangaByMagazineAsync(int magazineId, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Magazine,
                 magazineId.ToString(),
                 page.ToString()
             };
-            return await ExecuteGetRequest<MangaByMagazine>(request);
+            return await ExecuteGetRequestAsync<MangaByMagazine>(request);
         }
 
         #endregion
 
-        #region Person
+        #region Person/People
 
-        public async Task<Person> GetPerson(int id)
+        public async Task<Person> GetPersonAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Person,
                 id.ToString()
             };
-            return await ExecuteGetRequest<Person>(request);
+            return await ExecuteGetRequestAsync<Person>(request);
         }
 
-        public async Task<PersonPictures> GetPersonPictures(int id)
+        public async Task<PersonPictures> GetPersonPicturesAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Person,
                 id.ToString(),
                 Constants.Pictures
             };
-            return await ExecuteGetRequest<PersonPictures>(request);
+            return await ExecuteGetRequestAsync<PersonPictures>(request);
         }
 
-        public async Task<TopPeople> GetTopPeople()
+        public async Task<TopPeople> GetTopPeopleAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.People
             };
-            return await ExecuteGetRequest<TopPeople>(request);
+            return await ExecuteGetRequestAsync<TopPeople>(request);
         }
 
-        public async Task<TopPeople> GetTopPeople(int page)
+        public async Task<TopPeople> GetTopPeopleAsync(int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.People,
                 page.ToString()
             };
-            return await ExecuteGetRequest<TopPeople>(request);
+            return await ExecuteGetRequestAsync<TopPeople>(request);
         }
 
         #endregion
 
         #region Character
 
-        public async Task<Character> GetCharacter(int id)
+        public async Task<Character> GetCharacterAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Character,
                 id.ToString()
             };
-            return await ExecuteGetRequest<Character>(request);
+            return await ExecuteGetRequestAsync<Character>(request);
         }
 
-        public async Task<CharacterPictures> GetCharacterPictures(int id)
+        public async Task<CharacterPictures> GetCharacterPicturesAsync(int id)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Character,
                 id.ToString(),
                 Constants.Pictures
             };
-            return await ExecuteGetRequest<CharacterPictures>(request);
+            return await ExecuteGetRequestAsync<CharacterPictures>(request);
         }
 
-        public async Task<TopCharacter> GetTopCharacter()
+        public async Task<TopCharacter> GetTopCharacterAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Character
             };
-            return await ExecuteGetRequest<TopCharacter>(request);
+            return await ExecuteGetRequestAsync<TopCharacter>(request);
         }
 
-        public async Task<TopCharacter> GetTopCharacter(int page)
+        public async Task<TopCharacter> GetTopCharacterAsync(int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Top,
                 Constants.Character,
                 page.ToString()
             };
-            return await ExecuteGetRequest<TopCharacter>(request);
+            return await ExecuteGetRequestAsync<TopCharacter>(request);
         }
 
         #endregion
 
         #region Seasons
 
-        public async Task<Season> GetSeason()
+        public async Task<Season> GetSeasonAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Season
             };
-            return await ExecuteGetRequest<Season>(request);
+            return await ExecuteGetRequestAsync<Season>(request);
         }
 
-        public async Task<Season> GetSeason(int year, AnimeSeason season)
+        public async Task<Season> GetSeasonAsync(int year, AnimeSeason season)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Season,
                 year.ToString(),
                 season.GetDescription()
             };
-            return await ExecuteGetRequest<Season>(request);
+            return await ExecuteGetRequestAsync<Season>(request);
         }
 
-        public async Task<SeasonArchive> GetSeasonArchive()
+        public async Task<SeasonArchive> GetSeasonArchiveAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Season,
                 Constants.SeasonArchive
             };
-            return await ExecuteGetRequest<SeasonArchive>(request);
+            return await ExecuteGetRequestAsync<SeasonArchive>(request);
         }
 
         #endregion
 
         #region Schedule
 
-        public async Task<Schedule> GetSchedule()
+        public async Task<Schedule> GetScheduleAsync()
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Schedule
             };
-            return await ExecuteGetRequest<Schedule>(request);
+            return await ExecuteGetRequestAsync<Schedule>(request);
         }
 
-        public async Task<Schedule> GetSchedule(ScheduleDay day)
+        public async Task<Schedule> GetScheduleAsync(ScheduleDay day)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Schedule,
                 day.GetDescription()
             };
-            
-            return await ExecuteGetRequest<Schedule>(request);
+
+            return await ExecuteGetRequestAsync<Schedule>(request);
         }
 
         #endregion
 
         #region Searchs
 
-        public async Task<AnimeSearchResult> SearchAnime(string query)
+        public async Task<AnimeSearchResult> SearchAnimeAsync(string query)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"anime?q={query}"
             };
-            return await ExecuteGetRequest<AnimeSearchResult>(request);
+            return await ExecuteGetRequestAsync<AnimeSearchResult>(request);
         }
 
-        public async Task<AnimeSearchResult> SearchAnime(string query, int page)
+        public async Task<AnimeSearchResult> SearchAnimeAsync(string query, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"anime?q={query}&page={page}"
             };
-            return await ExecuteGetRequest<AnimeSearchResult>(request);
+            return await ExecuteGetRequestAsync<AnimeSearchResult>(request);
         }
 
-        public async Task<MangaSearchResult> SearchManga(string query)
+        public async Task<MangaSearchResult> SearchMangaAsync(string query)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"manga?q={query}"
             };
-            return await ExecuteGetRequest<MangaSearchResult>(request);
+            return await ExecuteGetRequestAsync<MangaSearchResult>(request);
         }
 
-        public async Task<MangaSearchResult> SearchManga(string query, int page)
+        public async Task<MangaSearchResult> SearchMangaAsync(string query, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"manga?q={query}&page={page}"
             };
-            return await ExecuteGetRequest<MangaSearchResult>(request);
+            return await ExecuteGetRequestAsync<MangaSearchResult>(request);
         }
 
-        public async Task<PersonSearchResult> SearchPerson(string query)
+        public async Task<PersonSearchResult> SearchPersonAsync(string query)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"person?q={query}"
             };
-            return await ExecuteGetRequest<PersonSearchResult>(request);
+            return await ExecuteGetRequestAsync<PersonSearchResult>(request);
         }
 
-        public async Task<PersonSearchResult> SearchPerson(string query, int page)
+        public async Task<PersonSearchResult> SearchPersonAsync(string query, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"person?q={query}&page={page}"
             };
-            return await ExecuteGetRequest<PersonSearchResult>(request);
+            return await ExecuteGetRequestAsync<PersonSearchResult>(request);
         }
 
-        public async Task<CharacterSearchResult> SearchCharacter(string query)
+        public async Task<CharacterSearchResult> SearchCharacterAsync(string query)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"character?q={query}"
             };
-            return await ExecuteGetRequest<CharacterSearchResult>(request);
+            return await ExecuteGetRequestAsync<CharacterSearchResult>(request);
         }
 
-        public async Task<CharacterSearchResult> SearchCharacter(string query, int page)
+        public async Task<CharacterSearchResult> SearchCharacterAsync(string query, int page)
         {
-            var request = new string[]
+            var request = new[]
             {
-                "v3",
                 Constants.Search,
                 $"character?q={query}&page={page}"
             };
-            return await ExecuteGetRequest<CharacterSearchResult>(request);
+            return await ExecuteGetRequestAsync<CharacterSearchResult>(request);
         }
 
         #endregion

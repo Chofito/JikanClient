@@ -16,112 +16,112 @@ namespace JikanClient.Interfaces
 {
     public interface IJikan
     {
-        Task<Anime> GetAnime(int id);
+        Task<Anime> GetAnimeAsync(int id);
 
-        Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaff(int id);
+        Task<AnimeCharactersAndStaff> GetAnimeCharactersAndStaffAsync(int id);
 
-        Task<AnimeEpisodes> GetAnimeEpisodes(int id);
+        Task<AnimeEpisodes> GetAnimeEpisodesAsync(int id);
 
-        Task<AnimeEpisodes> GetAnimeEpisodes(int id, int page);
+        Task<AnimeEpisodes> GetAnimeEpisodesAsync(int id, int page);
 
-        Task<AnimeNews> GetAnimeNews(int id);
+        Task<AnimeNews> GetAnimeNewsAsync(int id);
 
-        Task<AnimePictures> GetAnimePictures(int id);
+        Task<AnimePictures> GetAnimePicturesAsync(int id);
 
-        Task<AnimeVideos> GetAnimeVideos(int id);
+        Task<AnimeVideos> GetAnimeVideosAsync(int id);
 
-        Task<AnimeStats> GetAnimeStats(int id);
+        Task<AnimeStats> GetAnimeStatsAsync(int id);
 
-        Task<AnimeForum> GetAnimeForum(int id);
+        Task<AnimeForum> GetAnimeForumAsync(int id);
 
-        Task<AnimeMoreInfo> GetAnimeMoreInfo(int id);
+        Task<AnimeMoreInfo> GetAnimeMoreInfoAsync(int id);
 
-        Task<Manga> GetManga(int id);
+        Task<Manga> GetMangaAsync(int id);
 
-        Task<MangaCharacters> GetMangaCharacters(int id);
+        Task<MangaCharacters> GetMangaCharactersAsync(int id);
 
-        Task<MangaNews> GetMangaNews(int id);
+        Task<MangaNews> GetMangaNewsAsync(int id);
 
-        Task<MangaPictures> GetMangaPictures(int id);
+        Task<MangaPictures> GetMangaPicturesAsync(int id);
 
-        Task<MangaStats> GetMangaStats(int id);
+        Task<MangaStats> GetMangaStatsAsync(int id);
 
-        Task<MangaForum> GetMangaForum(int id);
+        Task<MangaForum> GetMangaForumAsync(int id);
 
-        Task<MangaMoreInfo> GetMangaMoreInfo(int id);
+        Task<MangaMoreInfo> GetMangaMoreInfoAsync(int id);
 
-        Task<Person> GetPerson(int id);
+        Task<Person> GetPersonAsync(int id);
 
-        Task<PersonPictures> GetPersonPictures(int id);
+        Task<PersonPictures> GetPersonPicturesAsync(int id);
 
-        Task<Character> GetCharacter(int id);
+        Task<Character> GetCharacterAsync(int id);
 
-        Task<CharacterPictures> GetCharacterPictures(int id);
+        Task<CharacterPictures> GetCharacterPicturesAsync(int id);
 
-        Task<Season> GetSeason();
+        Task<Season> GetSeasonAsync();
 
-        Task<Season> GetSeason(int year, AnimeSeason season);
+        Task<Season> GetSeasonAsync(int year, AnimeSeason season);
 
-        Task<SeasonArchive> GetSeasonArchive();
+        Task<SeasonArchive> GetSeasonArchiveAsync();
 
-        Task<Schedule> GetSchedule();
+        Task<Schedule> GetScheduleAsync();
 
-        Task<Schedule> GetSchedule(ScheduleDay day);
+        Task<Schedule> GetScheduleAsync(ScheduleDay day);
 
-        Task<TopAnime> GetTopAnime();
+        Task<TopAnime> GetTopAnimeAsync();
 
-        Task<TopAnime> GetTopAnime(int page);
+        Task<TopAnime> GetTopAnimeAsync(int page);
 
-        Task<TopAnime> GetTopAnime(TopAnimeSubType subType);
+        Task<TopAnime> GetTopAnimeAsync(TopAnimeSubType subType);
 
-        Task<TopAnime> GetTopAnime(int page, TopAnimeSubType subType);
+        Task<TopAnime> GetTopAnimeAsync(int page, TopAnimeSubType subType);
 
-        Task<TopManga> GetTopManga();
+        Task<TopManga> GetTopMangaAsync();
 
-        Task<TopManga> GetTopManga(int page);
+        Task<TopManga> GetTopMangaAsync(int page);
 
-        Task<TopManga> GetTopManga(TopMangaSubType subType);
+        Task<TopManga> GetTopMangaAsync(TopMangaSubType subType);
 
-        Task<TopManga> GetTopManga(int page, TopMangaSubType subType);
+        Task<TopManga> GetTopMangaAsync(int page, TopMangaSubType subType);
 
-        Task<TopCharacter> GetTopCharacter();
+        Task<TopCharacter> GetTopCharacterAsync();
 
-        Task<TopCharacter> GetTopCharacter(int page);
+        Task<TopCharacter> GetTopCharacterAsync(int page);
 
-        Task<TopPeople> GetTopPeople();
+        Task<TopPeople> GetTopPeopleAsync();
 
-        Task<TopPeople> GetTopPeople(int page);
+        Task<TopPeople> GetTopPeopleAsync(int page);
 
-        Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre);
+        Task<AnimeByGenre> GetAnimeByGenreAsync(AnimeGenre genre);
 
-        Task<AnimeByGenre> GetAnimeByGenre(AnimeGenre genre, int id);
+        Task<AnimeByGenre> GetAnimeByGenreAsync(AnimeGenre genre, int id);
 
-        Task<MangaByGenre> GetMangaByGenre(MangaGenre genre);
+        Task<MangaByGenre> GetMangaByGenreAsync(MangaGenre genre);
 
-        Task<MangaByGenre> GetMangaByGenre(MangaGenre genre, int id);
+        Task<MangaByGenre> GetMangaByGenreAsync(MangaGenre genre, int id);
 
-        Task<AnimeByProducer> GetAnimeByProducer(int producerId);
+        Task<AnimeByProducer> GetAnimeByProducerAsync(int producerId);
 
-        Task<AnimeByProducer> GetAnimeByProducer(int producerId, int page);
+        Task<AnimeByProducer> GetAnimeByProducerAsync(int producerId, int page);
 
-        Task<MangaByMagazine> GetMangaByMagazine(int magazineId);
+        Task<MangaByMagazine> GetMangaByMagazineAsync(int magazineId);
 
-        Task<MangaByMagazine> GetMangaByMagazine(int magazineId, int page);
+        Task<MangaByMagazine> GetMangaByMagazineAsync(int magazineId, int page);
 
-        Task<AnimeSearchResult> SearchAnime(string query);
+        Task<AnimeSearchResult> SearchAnimeAsync(string query);
 
-        Task<AnimeSearchResult> SearchAnime(string query, int page);
+        Task<AnimeSearchResult> SearchAnimeAsync(string query, int page);
 
-        Task<MangaSearchResult> SearchManga(string query);
+        Task<MangaSearchResult> SearchMangaAsync(string query);
                                      
-        Task<MangaSearchResult> SearchManga(string query, int page);
+        Task<MangaSearchResult> SearchMangaAsync(string query, int page);
 
-        Task<PersonSearchResult> SearchPerson(string query);
+        Task<PersonSearchResult> SearchPersonAsync(string query);
                                       
-        Task<PersonSearchResult> SearchPerson(string query, int page);
+        Task<PersonSearchResult> SearchPersonAsync(string query, int page);
 
-        Task<CharacterSearchResult> SearchCharacter(string query);
+        Task<CharacterSearchResult> SearchCharacterAsync(string query);
                                      
-        Task<CharacterSearchResult> SearchCharacter(string query, int page);
+        Task<CharacterSearchResult> SearchCharacterAsync(string query, int page);
     }
 }
