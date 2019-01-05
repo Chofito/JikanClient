@@ -4,6 +4,9 @@
 
 JikanClient is a .NET wrapper for [Jikan](https://jikan.moe/) RESTful API for parsing data from [MyAnimeList](https://myanimelist.com/). Main objective of the wrapper is to simplify utilization of Jikan API.
 
+**Deprecated, please use [Ervie/Jikan.Net](https://github.com/Ervie/jikan.net)
+I made this only for learning purpose**
+
 **Dependencies**
 -Newtonsoft Json
 
